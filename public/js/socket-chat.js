@@ -25,18 +25,14 @@ socket.on('disconnect', function() {
 
 });
 
-
-// Enviar información
-socket.emit('enviarMensaje', {
-    usuario: 'Fernando',
-    mensaje: 'Hola Mundo'
-}, function(resp) {
-    console.log('respuesta server: ', resp);
-});
-
 // Escuchar información
-socket.on('enviarMensaje', function(mensaje) {
+socket.on('createMessage', function(mensaje) {
 
     console.log('Servidor:', mensaje);
 
+});
+
+// Listen when user log in and logout to chat
+socket.on('userList', function( users ) {
+    console.log(users);
 });

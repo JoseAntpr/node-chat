@@ -16,10 +16,10 @@ class Users {
 
     getUser( id ) {
         let user = this.users.filter( u => {
-            return u.id = id;
+            return u.id == id;
         })[0];
 
-        return person;
+        return user;
     }
 
     getUsers() {
@@ -34,7 +34,7 @@ class Users {
 
         let deletedUser = this.getUser(id);
 
-        this.users.filter( u => {
+        this.users = this.users.filter( u => {
             return u.id != id;
         });
 
