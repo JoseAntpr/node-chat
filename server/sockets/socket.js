@@ -1,42 +1,23 @@
 const { io } = require('../server');
+const { Users } = require('../classes/users');
+
+const users = new Users();
 
 
 io.on('connection', (client) => {
 
-    console.log('Usuario conectado');
+    client.on('openChat', ( user, callback ) => {
+        if( !user.name ) {
+            return callback({
+                error: true,
+                message: 'Name is required'
+            });
+        }
 
-    client.emit('enviarMensaje', {
-        usuario: 'Administrador',
-        mensaje: 'Bienvenido a esta aplicación'
+        let usersArray = users.addUser( client.id, user.name );
+
+        callback(usersArray);
     });
 
-
-
-    client.on('disconnect', () => {
-        console.log('Usuario desconectado');
-    });
-
-    // Escuchar el cliente
-    client.on('enviarMensaje', (data, callback) => {
-
-        console.log(data);
-
-        client.broadcast.emit('enviarMensaje', data);
-
-
-        // if (mensaje.usuario) {
-        //     callback({
-        //         resp: 'TODO SALIO BIEN!'
-        //     });
-
-        // } else {
-        //     callback({
-        //         resp: 'TODO SALIO MAL!!!!!!!!'
-        //     });
-        // }
-
-
-
-    });
 
 });
