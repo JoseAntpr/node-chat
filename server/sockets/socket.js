@@ -8,12 +8,15 @@ const users = new Users();
 io.on('connection', (client) => {
 
     client.on('openChat', ( user, callback ) => {
-        if( !user.name ) {
+        console.log(user);
+        if( !user.name || !user.sala ) {
             return callback({
                 error: true,
-                message: 'Name is required'
+                message: 'Name/Sala is required'
             });
         }
+
+        client.join(user.sala);
 
         let usersArray = users.addUser( client.id, user.name );
 
