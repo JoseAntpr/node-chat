@@ -24,3 +24,15 @@ function renderUsers(users) {
 
   
 }
+
+
+// Listeners
+
+divUsers.on('click', 'a', function() {
+    var id = $(this).data('id');
+
+    if( id) {
+        console.log(id);
+    }
+    
+});
