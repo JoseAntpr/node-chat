@@ -26,9 +26,9 @@ class Users {
         return this.users;
     }
 
-    getUsersRoom ( room ) {
+    getUsersRoom ( sala ) {
         let usersInRoom = this.users.filter( user => {
-            return user.sala === room;
+            return user.sala === sala;
         });
 
         return usersInRoom;
