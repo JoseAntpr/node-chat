@@ -27,7 +27,11 @@ class Users {
     }
 
     getUsersRoom ( room ) {
-        // TODO
+        let usersInRoom = this.users.filter( user => {
+            return user.sala === room;
+        });
+
+        return usersInRoom;
     }
 
     deleteUser( id ) {

@@ -8,7 +8,6 @@ const users = new Users();
 io.on('connection', (client) => {
 
     client.on('openChat', ( user, callback ) => {
-        console.log(user);
         if( !user.name || !user.sala ) {
             return callback({
                 error: true,
@@ -18,11 +17,11 @@ io.on('connection', (client) => {
 
         client.join(user.sala);
 
-        let usersArray = users.addUser( client.id, user.name );
+        let usersArray = users.addUser( client.id, user.name, user.sala );
 
-        client.broadcast.emit('userList', users.getUsers());
+        client.broadcast.to(user.sala).emit('userList', users.getUsersRoom(user.sala));
 
-        callback(usersArray);
+        callback(users.getUsersRoom(user.sala));
     });
 
 
@@ -32,16 +31,16 @@ io.on('connection', (client) => {
 
         let message = createMessage( user.name, data.message);
 
-        client.broadcast.emit('createMessage', message);
+        client.broadcast.to(user.sala).emit('createMessage', message);
 
     });
 
     client.on('disconnect', () => {
         let deletedUser = users.deleteUser( client.id );
 
-        client.broadcast.emit('createMessage', createMessage('Admin', `${deletedUser.name} salió`));
+        client.broadcast.to(deletedUser.sala).emit('createMessage', createMessage('Admin', `${deletedUser.name} salió`));
 
-        client.broadcast.emit('userList', users.getUsers());
+        client.broadcast.to(deletedUser.sala).emit('userList', users.getUsersRoom(deletedUser.sala));
     });
 
     // Privates messages
