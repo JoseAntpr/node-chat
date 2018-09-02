@@ -27,9 +27,9 @@ socket.on('disconnect', function() {
 });
 
 // Escuchar información
-socket.on('createMessage', function(mensaje) {
+socket.on('createMessage', function(message) {
 
-    console.log('Servidor:', mensaje);
+    renderMessages(message, false);
 
 });
 

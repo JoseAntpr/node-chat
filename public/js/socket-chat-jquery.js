@@ -30,19 +30,42 @@ function renderUsers(users) {
   divUsers.html(html);
 }
 
-function renderMessages( message ) {
+function renderMessages( message, me) {
 
     var html = ''; 
+    var date = new Date(message.date);
+    var hour = date.getHours() + ':' + date.getMinutes();
 
+    var adminClass = 'info';
+    if( message.name === 'Admin' ){
+        adminClass= 'danger';
+    }
 
-    html += '<li class="animated fadeIn">';
-    html +=  '<div class="chat-img"><img src="assets/images/users/1.jpg" alt="user" /></div>';
-    html +=       '<div class="chat-content">';
-    html +=          '<h5>' + message.name +'</h5>';
-    html +=       '<div class="box bg-light-info">'+ message.message +'</div>';
-    html +=   '</div>';
-    html +=  '<div class="chat-time">10:56 am</div>';
-    html +='</li>';
+    if( me ){
+
+        html +='<li class="reverse">'
+        html +=   '<div class="chat-content">'
+        html +=      '<h5>'+ message.name +'</h5>'
+        html +=       '<div class="box bg-light-inverse">' + message.message + '</div>'
+        html +=   '</div>'
+        html +=   '<div class="chat-img"><img src="assets/images/users/5.jpg" alt="user" /></div>'
+        html +=   '<div class="chat-time">'+hour+'</div>'
+        html +='</li>'
+
+    } else {
+
+        html += '<li class="animated fadeIn">';
+        if (message.name !== 'Admin'){
+            html +=  '<div class="chat-img"><img src="assets/images/users/1.jpg" alt="user" /></div>';
+        }
+        html +=       '<div class="chat-content">';
+        html +=          '<h5>' + message.name +'</h5>';
+        html +=       '<div class="box bg-light-'+ adminClass +'">'+ message.message +'</div>';
+        html +=   '</div>';
+        html +=  '<div class="chat-time">'+hour+'</div>';
+        html +='</li>';
+
+    }
 
     divChatBox.append(html);
 
@@ -72,7 +95,7 @@ sendForm.on('submit', function(e){
         message: txtMessage.val()
     }, function( message ){
         txtMessage.val('').focus();
-        renderMessages(message);
+        renderMessages(message, true);
     });
 
 });

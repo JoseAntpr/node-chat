@@ -20,7 +20,8 @@ io.on('connection', (client) => {
         let usersArray = users.addUser( client.id, user.name, user.sala );
 
         client.broadcast.to(user.sala).emit('userList', users.getUsersRoom(user.sala));
-
+        client.broadcast.to(user.sala).emit('createMessage', createMessage('Admin', `${user.name} se unió`));
+        
         callback(users.getUsersRoom(user.sala));
     });
 
