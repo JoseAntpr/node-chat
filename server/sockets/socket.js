@@ -36,11 +36,18 @@ io.on('connection', (client) => {
     client.on('disconnect', () => {
         let deletedUser = users.deleteUser( client.id );
 
-        console.log(deletedUser);
-
         client.broadcast.emit('createMessage', createMessage('Admin', `${deletedUser.name} salió`));
 
         client.broadcast.emit('userList', users.getUsers());
+    });
+
+    // Privates messages
+    client.on('privateMessage', (data) => {
+        let user = users.getUser( client.id );
+
+        client.broadcast.to(data.to).emit('privateMessage', createMessage(user.name, data.message));
+
+
     });
 
 
