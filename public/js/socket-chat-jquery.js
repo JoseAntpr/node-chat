@@ -1,9 +1,16 @@
 // Render users
 var params = new URLSearchParams(window.location.search);
 
+var socket = io();
+
+var name = params.get('name');
+var sala = params.get('sala');
 
 // Jquery References
 var divUsers = $('#divUsuarios');
+var sendForm = $('#sendForm');
+var txtMessage = $('#txtMessage');
+var divChatBox = $('#divChatbox');
 
 function renderUsers(users) {
   console.log(users);
@@ -21,8 +28,24 @@ function renderUsers(users) {
   }
 
   divUsers.html(html);
+}
 
-  
+function renderMessages( message ) {
+
+    var html = ''; 
+
+
+    html += '<li class="animated fadeIn">';
+    html +=  '<div class="chat-img"><img src="assets/images/users/1.jpg" alt="user" /></div>';
+    html +=       '<div class="chat-content">';
+    html +=          '<h5>' + message.name +'</h5>';
+    html +=       '<div class="box bg-light-info">'+ message.message +'</div>';
+    html +=   '</div>';
+    html +=  '<div class="chat-time">10:56 am</div>';
+    html +='</li>';
+
+    divChatBox.append(html);
+
 }
 
 
@@ -35,4 +58,21 @@ divUsers.on('click', 'a', function() {
         console.log(id);
     }
     
+});
+
+sendForm.on('submit', function(e){
+    e.preventDefault();
+
+    if( txtMessage.val().trim() === 0 ){
+        return;
+    }
+
+    socket.emit('createMessage', {
+        name: name,
+        message: txtMessage.val()
+    }, function( message ){
+        txtMessage.val('').focus();
+        renderMessages(message);
+    });
+
 });

@@ -25,7 +25,7 @@ io.on('connection', (client) => {
     });
 
 
-    client.on('createMessage', (data) => {
+    client.on('createMessage', (data, callback) => {
 
         let user = users.getUser(client.id);
 
@@ -33,10 +33,16 @@ io.on('connection', (client) => {
 
         client.broadcast.to(user.sala).emit('createMessage', message);
 
+        callback( message );
     });
 
     client.on('disconnect', () => {
+
+        console.log('disconnect all users',users.getUsers());
+
+        console.log( 'disconnect client id', client.id );
         let deletedUser = users.deleteUser( client.id );
+        console.log('User borrar', deletedUser);
 
         client.broadcast.to(deletedUser.sala).emit('createMessage', createMessage('Admin', `${deletedUser.name} salió`));
 

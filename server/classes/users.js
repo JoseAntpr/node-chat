@@ -38,6 +38,8 @@ class Users {
 
         let deletedUser = this.getUser(id);
 
+        console.log('Class user', deletedUser);
+
         this.users = this.users.filter( u => {
             return u.id != id;
         });
